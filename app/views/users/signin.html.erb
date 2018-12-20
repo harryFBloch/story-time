@@ -1,0 +1,18 @@
+<h1>Welcome to Story Time Sign Up Here</h1>
+<div class = "row">
+
+    <%= form_for @user, class: "col s12", url: '/users/login', method: "post" do |f|%>
+      <div class="input-field col s6">
+        <%= f.label :email %><br />
+        <%= f.text_field :email %>
+      </div>
+
+      <div class="input-field col s6">
+        <%= f.label :password %><br />
+        <%= f.password_field :password %>
+      </div>
+
+        <%= f.submit "login", class: "btn waves-effect waves-light"%>
+
+    <% end %>
+</div>

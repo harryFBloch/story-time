@@ -1,0 +1,5 @@
+<ul class = "collection">
+  <% @posts.each do |post|%>
+    <li class = "collection_item"><%= link_to post.title, post_path(post) %> - <%= post.genre.name %></li>
+  <% end %>
+</ul>

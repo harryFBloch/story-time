@@ -1,0 +1,37 @@
+<h1>Welcome to Story Time Sign Up Here</h1>
+<div class = "row">
+    <%= form_for @user, class: "col s12" do |f|%>
+    <div class = "row">
+    <div class = "red">
+      <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
+    </div>
+    </div>
+    <br />
+    <div class = "row">
+      <div class="input-field col s6">
+        <%= f.label :username %><br />
+        <%= f.text_field :username, autofocus: true %>
+      </div>
+
+      <div class="input-field col s6">
+        <%= f.label :email %><br />
+        <%= f.text_field :email %>
+      </div>
+    </div>
+    <div class = "row">
+      <div class="input-field col s6">
+        <%= f.label :password %><br />
+        <%= f.text_field :password %>
+      </div>
+
+      <div class="input-field col s6">
+        <%= f.label :password_confirm %><br />
+        <%= f.text_field :password_confirmation %>
+      </div>
+
+      </div>
+      <div class = "row">
+        <%= f.submit "Sign Up", class: "btn waves-effect waves-light s4"%>
+      </div>
+    <% end %>
+</div>

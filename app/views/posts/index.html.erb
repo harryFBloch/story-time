@@ -1,5 +1,12 @@
-<ul class = "collection">
-  <% @posts.each do |post|%>
-    <li class = "collection_item"><%= link_to post.title, post_path(post) %> - <%= post.genre.name %></li>
-  <% end %>
-</ul>
+<%= form_tag(posts_path, method: "get") do %>
+<div class = "row valign-wrapper">
+  <div class =  "input-field col l4">
+    <%=text_field_tag :search_string %>
+  </div>
+    <div class="input-field col l4">
+        <%= collection_select :genre, :id, Genre.all,:id,:name,{:include_blank => 'Filter Genre'}, {class: "browser-default"}%>
+    </div>
+  <%= submit_tag "Search" , class: "btn waves-effect waves-light l4"%>
+  </div>
+<% end %>
+<%= render partial: "posts", locals: {posts: @posts} %>

@@ -1,0 +1,2 @@
+<h1 class = "center">Storys by <%= @user.username %></h1>
+<%= render partial: "posts/posts", locals: {posts: @user.posts} %>

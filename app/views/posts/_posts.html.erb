@@ -1,0 +1,6 @@
+
+<ul class = "collection">
+  <% posts.each do |post|%>
+    <li class = "collection-item center"><%= link_to post.title, post_path(post) %> - <%= post.genre.name %> - By: <%= post.user.username %></li>
+  <% end %>
+</ul>

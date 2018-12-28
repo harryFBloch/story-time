@@ -3,7 +3,9 @@ class PostsController < ApplicationController
   before_action :should_user_see_page
 
   def index
-    @posts = Post.all
+    #binding.pry
+    @posts = Post.search(params[:search_string])
+    @posts = Post.order_posts_by_genre(@posts, params[:genre][:id]) if params[:genre] && params[:genre][:id] != ""
   end
 
   def new
@@ -24,6 +26,7 @@ class PostsController < ApplicationController
 
   def show
     @sentance = Sentance.new
+    @comment = Comment.new
   end
 
   def edit
@@ -37,6 +40,10 @@ class PostsController < ApplicationController
     return render 'edit' unless @post.valid?
     @post.turn_content_into_sentances(params[:post][:generate_content])
     redirect_to post_path(@post)
+  end
+
+  def search
+    binding.pry
   end
 
   private

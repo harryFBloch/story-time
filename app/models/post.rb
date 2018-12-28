@@ -4,11 +4,13 @@ class Post < ApplicationRecord
   belongs_to :genre
   has_many :sentances
   has_attached_file :image
-  #do_not_validate_attachment_file_type :image
-  has_attached_file :image
   validates_attachment_presence :image
   validates_attachment_content_type :image, :content_type => /image/
   validates :title, :genre, presence: true
+
+  scope :filter_posts_by_genre, ->(posts, genre) {
+    posts.where(genre: genre)
+  }
 
   def generate_content
     story = ""
@@ -17,6 +19,11 @@ class Post < ApplicationRecord
       story += "." if story[-1] != "!" && story[-1] != "?" && story[-1] != "."
     }
     story
+  end
+
+  def self.search(string)
+    string.downcase if string != nil
+    self.where(Post.arel_table[:title].lower.matches("%#{string}%"))
   end
 
   def turn_content_into_sentances(content)

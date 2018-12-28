@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   def index
     #binding.pry
     @posts = Post.search(params[:search_string])
-    @posts = Post.order_posts_by_genre(@posts, params[:genre][:id]) if params[:genre] && params[:genre][:id] != ""
+    @posts = Post.filter_posts_by_genre(@posts, params[:genre][:id]) if params[:genre] && params[:genre][:id] != ""
   end
 
   def new

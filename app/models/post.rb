@@ -8,9 +8,7 @@ class Post < ApplicationRecord
   validates_attachment_content_type :image, :content_type => /image/
   validates :title, :genre, presence: true
 
-  scope :filter_posts_by_genre, ->(posts, genre) {
-    posts.where(genre: genre)
-  }
+  scope :filter_posts_by_genre, ->(posts, genre) {posts.where(genre: genre)}
 
   def generate_content
     story = ""

@@ -18,9 +18,13 @@ class UsersController < ApplicationController
 
   def login
     user = User.find_by_email(user_params[:email])
-    return redirect_to signin_user_path unless user && user.authenticate(user_params[:password])
-    session[:user_id] = user.id
-    redirect_to posts_path
+    if user && user.authenticate(user_params[:password])
+      session[:user_id] = user.id
+      redirect_to posts_path
+    else
+      flash[:error] = "Incorrect Email or Password. Please Try Again" 
+      redirect_to signin_user_path
+    end
   end
 
   def logout

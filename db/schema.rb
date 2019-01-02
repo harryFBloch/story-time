@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2019_01_02_175336) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "uid"
+    t.decimal "uid"
   end
 
 end

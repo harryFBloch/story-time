@@ -8,8 +8,10 @@ in order to get the app to work you need to add a file /config/initializers/omni
 
 and in that file add
 
+```
 OmniAuth.config.logger = Rails.logger
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']
 end
+```

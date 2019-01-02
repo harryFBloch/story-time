@@ -13,3 +13,47 @@
  *= require_tree .
  *= require_self
  */
+
+ body {
+   background-color: #eceff1
+ }
+
+ li {
+   color: #e65100
+ }
+
+
+ .collection-item a{
+   color: #e65100
+ }
+
+ .collection-item {
+   color: #90a4ae
+ }
+
+ h1, h5{
+   color: #e65100
+ }
+
+  .waves-effect input[type="submit"]  {
+   color: white
+ }
+
+ .input-field input[type=text]:focus + label, .materialize-textarea:focus:not([readonly]) + label {
+  color: #90a4ae !important;
+ }
+
+/* label underline focus color */
+ .input-field input[type=text]:focus, .materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #90a4ae !important;
+  box-shadow: 0 1px 0 0 #90a4ae !important;
+ }
+
+ .input-field input[type=password]:focus, .materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #90a4ae !important;
+  box-shadow: 0 1px 0 0 #90a4ae !important;
+ }
+
+ .waves-effect {
+   color: #e65100
+ }

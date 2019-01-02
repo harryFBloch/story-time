@@ -6,7 +6,7 @@
     <div class="input-field col l4">
         <%= collection_select :genre, :id, Genre.all,:id,:name,{:include_blank => 'Filter Genre'}, {class: "browser-default"}%>
     </div>
-  <%= submit_tag "Search" , class: "btn waves-effect waves-light l4"%>
+  <%= submit_tag "Search" , class: "btn waves-effect waves-light l4 orange darken-4"%>
   </div>
 <% end %>
 <%= render partial: "posts", locals: {posts: @posts} %>

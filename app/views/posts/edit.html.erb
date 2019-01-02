@@ -20,10 +20,10 @@
 </div>
 
 <div class = "row">
-  <%=f.label "Change image", class: "btn waves-effect waves-light", style: "color:black", for: "fileUploader"%>
+  <%=f.label "Change image", class: "btn waves-effect waves-light orange darken-4", style: "color:white", for: "fileUploader"%>
     <span style="display:none;">
       <%= f.file_field :image, id: "fileUploader",accept: 'image/png,image/jpeg'%>
     </span>
 </div>
-<%= f.submit "Edit Post", class: "btn waves-effect waves-light" %>
+<%= f.submit "Edit Post", class: "btn waves-effect waves-light orange darken-4" %>
 <% end %>

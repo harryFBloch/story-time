@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       session[:user_id] = user.id
       redirect_to posts_path
     else
-      flash[:error] = "Incorrect Email or Password. Please Try Again" 
+      flash[:error] = "Incorrect Email or Password. Please Try Again"
       redirect_to signin_user_path
     end
   end
@@ -34,6 +34,15 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+  end
+
+  def googleAuth
+    user = User.find_or_create_by(email: request.env["omniauth.auth"][:info][:email])
+    user.password = request.env["omniauth.auth"][:uid] if user.password == nil
+    user.username = request.env["omniauth.auth"][:info][:first_name] if user.username == nil
+    user.save
+    session[:user_id] = user.id
+    redirect_to posts_path
   end
 
   private

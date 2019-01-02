@@ -29,6 +29,9 @@
 <div class = "row">
   <%= form_for @comment, class: "col s12" do |f| %>
   <div class = "row valign-wrapper" >
+    <div class = "red s6">
+      <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
+    </div>
     <div class = "input-field col s6">
       <%= f.hidden_field :post_id, value: @post.id %>
       <%= f.label "Add a Comment" %><br />
@@ -39,8 +42,9 @@
     </div>
   <% end %>
   </div>
- <ul class = "collection">
+ <ul class = "collection" style = "width: 50%">
+   <li class = "center">Comments</li>
    <% @post.comments.each do |comment| %>
-     <li class = "collection_item"><%= comment.content%> - posted by: <%= comment.user.username %></li>
+     <li class = "collection_item s6 center"><%= comment.content%> - posted by: <%= comment.user.username %></li>
    <% end %>
  </ul>

@@ -41,9 +41,7 @@ class UsersController < ApplicationController
     user.uid = request.env["omniauth.auth"][:uid] if user.uid == nil
     user.password = SecureRandom.hex(9) if user.id == nil
     user.username = request.env["omniauth.auth"][:info][:first_name] if user.username == nil
-    binding.pry
     user.save if user.id == nil
-
     session[:user_id] = user.id
     redirect_to posts_path
   end

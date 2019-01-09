@@ -1,8 +1,11 @@
 class SentancesController < ApplicationController
 
   def create
-    if sentance_params[:content].split(/(?<=[?.!])/).count == 1
-      @sentance = Sentance.create(sentance_params)
+    #binding.pry
+
+    if sentance_params[:content].split(/(?<=[?.!])/).select(&:presence).count == 1
+      @sentance = Sentance.new(sentance_params)
+      @sentance.content = sentance_params[:content].split(/(?<=[?.!])/).select(&:presence)[0]
       @sentance.user = current_user
       @sentance.save
       @post = @sentance.post

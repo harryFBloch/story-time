@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :get_post, only: [:show, :edit, :update]
+  before_action :get_post, only: [:show, :edit, :update, :destroy]
   before_action :should_user_see_page
 
   def index
@@ -44,6 +44,12 @@ class PostsController < ApplicationController
 
   def search
     binding.pry
+  end
+
+  def destroy
+    return redirect_to login_user_path unless current_user == @post.user
+    @post.destroy
+    redirect_to posts_path
   end
 
   private

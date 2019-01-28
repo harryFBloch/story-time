@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :get_post, only: [:show, :edit, :update, :destroy]
   before_action :should_user_see_page
+  before_action :check_user, only: [:edit, :update, :destroy]
 
   def index
     #binding.pry
@@ -30,11 +31,9 @@ class PostsController < ApplicationController
   end
 
   def edit
-    return redirect_to login_user_path unless current_user == @post.user
   end
 
   def update
-    return redirect_to login_user_path unless current_user == @post.user
     @post.genre = Genre.find_by_name(params[:post][:genre])
     @post.update(post_params)
     return render 'edit' unless @post.valid?
@@ -47,7 +46,6 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    return redirect_to login_user_path unless current_user == @post.user
     @post.destroy
     redirect_to posts_path
   end
@@ -55,6 +53,10 @@ class PostsController < ApplicationController
   private
   def get_post
     @post = Post.find(params[:id])
+  end
+
+  def check_user
+    return redirect_to login_user_path unless current_user == @post.user
   end
 
   def post_params

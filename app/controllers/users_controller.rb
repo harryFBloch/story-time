@@ -7,8 +7,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     return render "new" unless user_params[:password] == user_params[:password_confirmation] && @user.valid?
-    user.save
-    session[:user_id] = user.id
+    @user.save
+    session[:user_id] = @user.id
     redirect_to posts_path
   end
 

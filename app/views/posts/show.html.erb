@@ -1,4 +1,4 @@
-<h1 class = "center-align"><%= @post.title %></h1>
+<h1 class = "center-align" data-id="<%=@post.id %>"><%= @post.title %></h1>
 <h5 class = "center-align"><%= @post.genre.name %></h5>
 <div class = "row">
   <img class = "col s12 center-align responsive-img" src = "<%= @post.image.url %>" />
@@ -37,12 +37,11 @@
       <%= f.label "Add a Comment" %><br />
       <%= f.text_field :content %>
     </div>
-      <%= f.submit "Submit Comment", class: "btn waves-effect waves-light s6 orange darken-4"%>
-
+      <%= f.submit "Submit Comment", class: "btn waves-effect waves-light s6 orange darken-4" , onclick: "submitComment()"%>
     </div>
   <% end %>
   </div>
- <ul class = "collection" style = "width: 50%">
+ <ul class = "collection" style = "width: 50%" id="comments-collection">
    <li class = "center blue-grey darken-2">Comments</li>
    <% @post.comments.each do |comment| %>
     <hr />

@@ -39,4 +39,27 @@ class Post < ApplicationRecord
     return nil if self.sentances.count < 1
     self.sentances.last.user.username
   end
+
+  def last_poster_id
+    return nil if self.sentances.count < 1
+    self.sentances.last.user.id
+  end
+
+  def get_json_content_for_post(current_user)
+    current_user.id == last_poster_id ? last_poster = false : last_poster = true
+    return {can_post: last_poster, content: generate_content()}
+  end
+
+  def next_or_prev_post(next_bool)
+    prevPost = self
+    Post.order(:id).each{|post|
+      post.image_url = post.image.url
+      if next_bool == "true"
+        return post if post.id > self.id
+      else
+        return prevPost if post.id > prevPost.id && post.id == self.id
+      end
+      prevPost = post
+    }
+  end
 end

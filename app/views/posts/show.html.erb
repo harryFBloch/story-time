@@ -1,13 +1,18 @@
-<h1 class = "center-align" data-id="<%=@post.id %>"><%= @post.title %></h1>
-<h5 class = "center-align"><%= @post.genre.name %></h5>
-<div class = "row">
-  <img class = "col s12 center-align responsive-img" src = "<%= @post.image.url %>" />
+<div clas= "row">
+    <a class="waves-effect orange darken-4 btn right s3" onclick="nextPrevPost(true)"><i class="material-icons right">keyboard_arrow_right</i>Next Story</a>
+    <a class="waves-effect orange darken-4 btn left s3" onclick="nextPrevPost(false)"><i class="material-icons left">keyboard_arrow_left</i>Prev Story</a>
 </div>
-<p><%= @post.generate_content if @post.sentances.count > 0 %></p>
+
+<h1 class = "center-align" data-id="<%=@post.id %>"><%= @post.title %></h1>
+<h5 class = "center-align" id = "genre"><%= @post.genre.name %></h5>
+<div class = "row">
+  <img class = "col s12 center-align responsive-img" src = "<%= @post.image.url %>" id = "post-image"/>
+</div>
+<p id="sentance"><%= @post.generate_content if @post.sentances.count > 0 %></p>
 <%= link_to "Edit Story", edit_post_path(@post), class: "orange-text darken-4" if current_user == @post.user %>
 
 <% if @post.last_poster != current_user.username %>
-<div class = "row" >
+<div class = "row" id = "sentance-form" >
   <%= form_for @sentance, class: "col s12" do |f|%>
   <div class = "red">
     <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
@@ -17,14 +22,19 @@
       <%= f.hidden_field :post_id, value: @post.id %>
       <%= f.label "Add a Sentance" %><br />
       <%= f.text_field :content %>
-      <%= f.submit "Add Sentance", class: "btn waves-effect waves-light s6 orange darken-4"%>
+      <%= f.submit "Add Sentance", class: "btn waves-effect waves-light s6 orange darken-4", onclick: "submitSentanceForPost()"%>
       </div>
   </div>
   <% end %>
   </div>
- <% else %>
-  <h5>Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>
- <% end %>
+  <% end %>
+
+  <div id = "sentance-error">
+    <% if @post.last_poster == current_user.username %>
+      <h5>Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>
+    <% end %>
+  </div>
+
 
 <div class = "row">
   <%= form_for @comment, class: "col s12" do |f| %>
@@ -41,10 +51,13 @@
     </div>
   <% end %>
   </div>
+
  <ul class = "collection" style = "width: 50%" id="comments-collection">
    <li class = "center blue-grey darken-2">Comments</li>
-   <% @post.comments.each do |comment| %>
-    <hr />
-     <li class = "collection_item s6 center"><%= comment.content%> - posted by: <%= comment.user.username %></li>
-   <% end %>
+   <div id="comments-reset">
+     <% @post.comments.each do |comment| %>
+      <hr />
+       <li class = "collection_item s6 center"><%= comment.content%> - posted by: <%= comment.user.username %></li>
+     <% end %>
+   </div>
  </ul>

@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :get_post, only: [:show, :edit, :update, :destroy]
   before_action :should_user_see_page
   before_action :check_user, only: [:edit, :update, :destroy]
+  before_action :get_nested_post, only: [:next, :get_sentance_content_for_post]
 
   def index
     #binding.pry
@@ -28,6 +29,10 @@ class PostsController < ApplicationController
   def show
     @sentance = Sentance.new
     @comment = Comment.new
+    respond_to do |format|
+      format.json {render json: @post, status: 200}
+      format.html {}
+    end
   end
 
   def edit
@@ -50,9 +55,21 @@ class PostsController < ApplicationController
     redirect_to posts_path
   end
 
+  def next
+    render json: @post.next_or_prev_post(params[:next_bool])
+  end
+
+  def get_sentance_content_for_post
+    render json: @post.get_json_content_for_post(current_user)
+  end
+
   private
   def get_post
     @post = Post.find(params[:id])
+  end
+
+  def get_nested_post
+    @post = Post.find(params[:post_id])
   end
 
   def check_user

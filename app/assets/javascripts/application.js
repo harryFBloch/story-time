@@ -14,3 +14,7 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
+//= require helpers/helpers
+//= require comments/comments
+//= require sentances/sentances
+//= require posts

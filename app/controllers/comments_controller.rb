@@ -7,7 +7,17 @@ class CommentsController < ApplicationController
     @sentance = Sentance.new
     return render :template => 'posts/show' unless @comment.valid?
     @comment.save
-    redirect_to post_path(@post)
+    respond_to do |format|
+      format.json {render json: @comment, status: 200}
+      format.html {redirect_to post_path(@post)}
+    end
+  end
+
+  def comments_for_post
+    @comments = Post.find(params[:post_id]).comments
+    respond_to do |format|
+      format.json {render json: @comments, status: 200}
+    end
   end
 
   private

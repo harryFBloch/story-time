@@ -12,7 +12,10 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
    <!-- Compiled and minified JavaScript -->
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
     <nav>
@@ -25,6 +28,7 @@
           <% else %>
             <li><%= link_to "New Story", new_post_path %></li>
             <li><%= link_to "Logout", logout_user_path %></li>
+            <%= csrf_meta_tag %>
           <% end %>
         </ul>
       </div>

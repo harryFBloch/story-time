@@ -19,11 +19,13 @@
 <div class = "row">
   <%= f.text_area :generate_content, value: @post.generate_content %>
 </div>
-
+<div>
+  <img id="thumbnail" class = "col center-align responsive-img" src = "<%= @post.image.url %>" id = "post-image"/>
+</div>
 <div class = "row">
   <%=f.label "Change image", class: "btn waves-effect waves-light orange darken-4", style: "color:white", for: "fileUploader"%>
     <span style="display:none;">
-      <%= f.file_field :image, id: "fileUploader",accept: 'image/png,image/jpeg'%>
+      <%= f.file_field :image, id: "fileUploader",accept: 'image/png,image/jpeg', onchange: 'displayImage(this)'%>
     </span>
 </div>
 <%= f.submit "Edit Post", class: "btn waves-effect waves-light orange darken-4" %>

@@ -6,58 +6,73 @@
 <h1 class = "center-align" data-id="<%=@post.id %>"><%= @post.title %></h1>
 <h5 class = "center-align" id = "genre"><%= @post.genre.name %></h5>
 <div class = "row">
-  <img class = "col s12 center-align responsive-img" src = "<%= @post.image.url %>" id = "post-image"/>
+  <img class = "col s6 offset-s3 circle responsive-img" src = "<%= @post.image.url %>" id = "post-image"/>
 </div>
-<p id="sentance"><%= @post.generate_content if @post.sentances.count > 0 %></p>
-<%= link_to "Edit Story", edit_post_path(@post), class: "orange-text darken-4" if current_user == @post.user %>
+  <div class = "row center-align">
+    <p class = "col s8 offset-s2" id="sentance"><%= @post.generate_content if @post.sentances.count > 0 %></p>
+  </div>
+
+<div id = "edit-button">
+  <%= link_to "Edit Story", edit_post_path(@post), class: "orange-text darken-4" if current_user == @post.user %>
+</div>
+
 
 <% if @post.last_poster != current_user.username %>
 <div class = "row" id = "sentance-form" >
-  <%= form_for @sentance, class: "col s12" do |f|%>
+  <%= form_for @sentance do |f|%>
   <div class = "red">
     <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
   </div>
   <div class = "row" >
-    <div class = "input-field col s6">
+    <div class = "input-field col s4">
       <%= f.hidden_field :post_id, value: @post.id %>
-      <%= f.label "Add a Sentance" %><br />
       <%= f.text_field :content %>
-      <%= f.submit "Add Sentance", class: "btn waves-effect waves-light s6 orange darken-4", onclick: "submitSentanceForPost()"%>
+      <%= f.label "Add a Sentance", for: "sentance_content"%>
+      <%= f.submit "Add Sentance", class: "btn waves-effect waves-light orange darken-4", onclick: "submitSentanceForPost()"%>
       </div>
   </div>
   <% end %>
   </div>
   <% end %>
 
-  <div id = "sentance-error">
+  <div id = "sentance-error" class = "row">
     <% if @post.last_poster == current_user.username %>
-      <h5>Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>
+      <h5 class = "col s6 offset-s3 blue-grey darken-2">Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>
     <% end %>
   </div>
-
+<div class = "row"></div>
 
 <div class = "row">
-  <%= form_for @comment, class: "col s12" do |f| %>
-  <div class = "row valign-wrapper" >
-    <div class = "red s6">
-      <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
-    </div>
-    <div class = "input-field col s6">
-      <%= f.hidden_field :post_id, value: @post.id %>
-      <%= f.label "Add a Comment" %><br />
-      <%= f.text_field :content %>
-    </div>
-      <%= f.submit "Submit Comment", class: "btn waves-effect waves-light s6 orange darken-4" , onclick: "submitComment()"%>
-    </div>
-  <% end %>
-  </div>
+  <div class = "col s6 offset-s5 center">
 
- <ul class = "collection" style = "width: 50%" id="comments-collection">
-   <li class = "center blue-grey darken-2">Comments</li>
-   <div id="comments-reset">
-     <% @post.comments.each do |comment| %>
-      <hr />
-       <li class = "collection_item s6 center"><%= comment.content%> - posted by: <%= comment.user.username %></li>
-     <% end %>
+      <%= form_for @comment, class: "col" do |f| %>
+      <div class = "valign-wrapper">
+        <div class = "red ">
+          <%= f.object.errors.full_messages.join(", ") if f.object.errors.any? %>
+        </div>
+        <div class = "input-field col">
+          <%= f.hidden_field :post_id, value: @post.id %>
+          <%= f.label "Add a Comment", for: "comment_content" %><br />
+          <%= f.text_field :content %>
+        </div>
+          <%= f.submit "Submit Comment", class: "btn waves-effect waves-light orange darken-4" , onclick: "submitComment()"%>
+        </div>
+      <% end %>
+
+   <ul class = "collection" id="comments-collection">
+     <li class = "collection_item center blue-grey darken-2">Comments</li>
+     <div id="comments-reset">
+       <% @post.comments.each do |comment| %>
+        <hr />
+         <li class = "collection_item s6 center"><%= comment.content%> - posted by: <%= comment.user.username %></li>
+       <% end %>
+     </div>
+   </ul>
    </div>
- </ul>
+ </div>
+
+ <div clas= "row">
+     <a class="waves-effect orange darken-4 btn right s3 offset-s1" onclick="nextPrevPost(true)"><i class="material-icons right">keyboard_arrow_right</i></a>
+     <a class="waves-effect orange darken-4 btn left s3 offset-s1" onclick="nextPrevPost(false)"><i class="material-icons left">keyboard_arrow_left</i></a>
+ </div>
+ <br />

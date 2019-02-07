@@ -5,9 +5,13 @@ class PostsController < ApplicationController
   before_action :get_nested_post, only: [:next, :get_sentance_content_for_post]
 
   def index
-    #binding.pry
     @posts = Post.search(params[:search_string])
-    @posts = Post.filter_posts_by_genre(@posts, params[:genre][:id]) if params[:genre] && params[:genre][:id] != ""
+    @posts = Post.filter_posts_by_genre(@posts, params[:genre_id]) if params[:genre_id] && params[:genre_id] != ""
+    @total_posts = Post.all.length
+    respond_to do |format|
+      format.json {render json: @posts , status: 200}
+      format.html {}
+    end
   end
 
   def new

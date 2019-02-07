@@ -15,10 +15,13 @@
   </div>
 
 </div>
+<div class="row">
+  <img id="thumbnail" class = "col s6 offset-s3 circle responsive-img"/>
+  </div>
 <div class = "row">
-  <%=f.label "Upload new image", class: "btn waves-effect waves-light orange darken-4", style: "color:white", for: "fileUploader"%>
+  <%=f.label "Upload new image", class: "btn waves-effect waves-light orange darken-4", style: "color:white", for: "fileUploader", id: "image-button"%>
     <span style="display:none;">
-      <%= f.file_field :image, id: "fileUploader",accept: 'image/png,image/jpeg'%>
+      <%= f.file_field :image, id: "fileUploader",accept: 'image/png,image/jpeg', onchange: 'displayImage(this)'%>
     </span>
 </div>
 <%= f.submit "Submit Post", class: "btn waves-effect waves-light orange darken-4" %>

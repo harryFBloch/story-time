@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   # Routes for Google authentication
   get "auth/:provider/callback", to: "users#googleAuth"
   get "auth/failure", to: redirect("/")
-
+  get '/current_user', to: "application#get_current_user"
   resources :users do
     resources :posts, only: [:show, :new]
   end

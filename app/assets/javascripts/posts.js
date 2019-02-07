@@ -8,73 +8,40 @@ class Post{
     this.sentances = []
     this.comments = []
   }
-
-  getCommentsForPost(){
-    fetch(`/posts/${this.id}/comments`,{
-      method: "GET",
-      headers:{
-        contentType: 'application/json; charset=utf-8',
-      }
-    }).then(resp => resp.json().then(jsonComments => {
-        this.comments = jsonComments
-        this.loadPostToDom()
-    }))
-  }
   loadPostToDom(){
     loadPostAttributes(this)
     laodPostCommentsToDom(this.comments)
-    this.getSentancesForPost()
-  }
+    //api call to get sentances for posts
+    fetchGetHelper(`/posts/${this.id}/sentances`,jsonSentances => {
 
-  getSentancesForPost(){
-    fetch(`/posts/${this.id}/sentances`,{
-      method: "GET",
-      headers:{
-        contentType: 'application/json; charset=utf-8',
-      }
-    }).then(resp => resp.json().then(jsonSentances => {
         this.sentances = jsonSentances
         loadSentancesToDom(this)
-    }))
+    })
+    this.checkCurrentUser()
+  }
+  //check current user to see if should show link for edit page
+  checkCurrentUser(){
+    fetchGetHelper('/current_user', user => {
+      if (user.id === this.userId) {
+        document.getElementById('edit-button').innerHTML = `<a href="/posts/${this.id}/edit" class = "orange-text darken-4">Edit Story</a>`
+      }else{
+        clearChildren('edit-button')
+      }
+    })
   }
 }
 
-
-function loadSentancesToDom(post){
-  sentanceHash = post.sentances
-  document.getElementById('sentance').innerHTML = sentanceHash.content
-  if (sentanceHash.can_post === true) {
-    allowPosting(post)
-  }else{
-    dontAllowPosting()
-  }
-}
-
+//was not the last user to post
 function allowPosting(post){
+  clearChildren('sentance-form')
   clearChildren('sentance-error')
-  document.getElementById('sentance-error').innerHTML= createSentanceForm(post.id)
+  document.getElementById('sentance-form').innerHTML= createSentanceForm(post.id)
 }
 
-function createSentanceForm(id){
-  return `
-    <form class: "col s12">
-    <div class="row">
-        <div class="input-field col s6">
-          <input type="hidden" value='${id}'>
-          <input placeholder="Placeholder" id="sentance_content" type="text" name="sentance[content]">
-          <label for="sentance-input">Add a Sentance</label>
-        </div>
-        <button class="btn waves-effect waves-light s6 orange darken-4" type="submit" name="action" onclick="submitSentanceForPost()">Submit Sentance
-          <i class="material-icons right">send</i>
-        </button>
-      </div>
-    </form>
-  `
-}
-
+//was the last user to post
 function dontAllowPosting(){
   clearChildren('sentance-form')
-  document.getElementById('sentance-error').innerHTML = '<h5>Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>'
+  document.getElementById('sentance-error').innerHTML = '<h5 class = "col s6 offset-3 blue-grey darken-2">Wait for someone else to post a sentance before you can add! share this post to get the story moving</h5>'
 }
 
 function loadPostAttributes(post){
@@ -84,61 +51,26 @@ function loadPostAttributes(post){
   $('#post-image')[0].src = post.image_url
 }
 
-function laodPostCommentsToDom(comments){
-  clearChildren('comments-reset')
-  comments.forEach(comment => appendComment(comment))
-}
-
-function clearChildren(id){
-    document.getElementById(id).innerHTML = ''
-}
-
-function getPost(post_id){
-  fetch(`/posts/${post_id}`,{
-    method: "GET",
-    headers:{
-      contentType: 'application/json; charset=utf-8',
-    }
-  }).then(resp => resp.json().then(jsonPost => {
-      const post = new Post(jsonPost)
-      post.getCommentsForPost()
-
-  }))
+//search button on post index page
+function searchButtonPressed(){
+  event.preventDefault()
+  var selector = document.getElementById("genre_id")
+  var genre = selector.options[selector.selectedIndex].value
+  fetchGetHelper(`/posts?search_string=${document.getElementById('search_string').value}&genre_id=${genre}`,postIndexCallback)
   return false
 }
 
-function appendComment(comment){
-  $('#comments-collection').append(`<hr /><li class = "collection_item s6 center">${comment.content} - posted by: ${comment.user.username}</li>`)
+function postIndexCallback(jsonPosts){
+  clearChildren("post-collection")
+  let tempHTMLString = ""
+  document.getElementById("length-posts").innerHTML = jsonPosts.length
+  jsonPosts.forEach(post => {
+    tempHTMLString += `<li class = "collection-item center"><a href="/posts/${post.id}">${post.title}</a> - ${post.genre.name} - By: ${post.user.username}</li>`
+  })
+  document.getElementById("post-collection").innerHTML = tempHTMLString
 }
 
-
-function submitComment(){
-  event.preventDefault();
-  $.ajax('/comments',{
-    method: "POST",
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify({comment:{content: $('#comment_content')[0].value, post_id: $('h1')[0].dataset.id}}),
-    headers: {'X-CSRF-Token': Rails.csrfToken()}
-  }).then(comment => {
-    appendComment(comment)
-  }).fail(error => console.log(error))
-  return false
-}
-
-function submitSentanceForPost(){
-  event.preventDefault();
-  $.ajax('/sentances',{
-    method: "POST",
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify({sentance:{content: $('#sentance_content')[0].value, post_id: $('h1')[0].dataset.id}}),
-    headers: {'X-CSRF-Token': Rails.csrfToken()}
-  }).then(sentance => {
-    document.getElementById('sentance').append(sentance.content)
-    dontAllowPosting()
-  }).fail(error => console.log(error))
-  return false
-}
-
+//if true next post if false prev post
 function nextPrevPost(next_bool){
   fetch(`/posts/${$('h1')[0].dataset.id}/next/?next_bool=${JSON.stringify(next_bool)}`,{
     method: "GET",
@@ -147,6 +79,22 @@ function nextPrevPost(next_bool){
     }
   }).then(resp => resp.json().then(jsonPost => {
     const post = new Post(jsonPost)
-    post.getCommentsForPost()
+    // getCommentsForPost
+    fetchGetHelper(`/posts/${post.id}/comments`, jsonComments => {
+      post.comments = jsonComments
+      post.loadPostToDom()
+    })
   }))
+}
+
+function displayImage(input){
+  document.getElementById('image-button').innerHTML = "Change Image"
+  if (input.files && input.files[0]) {
+    let reader = new FileReader()
+    reader.onload = function (e) {
+      $('#thumbnail')
+        .attr('src', e.target.result)
+    }
+    reader.readAsDataURL(input.files[0])
+  }
 }

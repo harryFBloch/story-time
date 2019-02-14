@@ -27,4 +27,4 @@
 /config/master.key
 
 #ignore omniauth initializer
-/config/initializers/omniauth.rb
+.env

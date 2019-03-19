@@ -15,3 +15,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET']
 end
 ```
+
+blog post = https://harryfbloch.github.io/storytime_javascript_project
+
+demo = https://www.youtube.com/watch?v=99DY5EuUtow
